@@ -44,13 +44,13 @@ void CheckCapacity(SeqList* psl)//检查空间是否足够
 	assert(psl);
 	if (psl->size >= psl->capicity)
 	{
-		size_t newcapicity = psl->capicity == 0 ? 4 : psl->capicity *sizeof(SLDataType)* 2;
+		size_t newcapicity = psl->capicity == 0 ? 4 : psl->capicity *sizeof(SLDataType)* 2;//当空间为0时为4个字节，否则扩容二倍。
 		psl->array=realloc(psl->array, newcapicity);
 		psl->capicity = newcapicity;
 	}
 
 }
-void SeqListPushBack(SeqList* psl, SLDataType x)//在顺序后面添加一个值
+void SeqListPushBack(SeqList* psl, SLDataType x)//在顺序后面添加一个值x
 {
 	assert(psl);
 	CheckCapacity(psl);
@@ -59,7 +59,8 @@ void SeqListPushBack(SeqList* psl, SLDataType x)//在顺序后面添加一个值
 }
 void SeqListPopBack(SeqList* psl)//删除顺序表的最后一个有效值
 {
-	asserr(psl&&psl->size >0);
+	asserr(psl&&psl->size > 0);//保证有效数值大于0
+	CheckCapacity(psl);
 	psl->size--;
 
 }
@@ -67,19 +68,19 @@ void SeqListPushFront(SeqList* psl, SLDataType x)//在顺训表的开始处插入一个数
 {
 	assert(psl);
 	CheckCapacity(psl);
-	int end = psl->size - 1;
+	int end = psl->size - 1;//把顺序表整体向后挪动一个位置
 	for (; end <= 0; --end)
 	{
 		psl->array[end + 1] = psl->array[end];
 	}
-	psl->array[end] = x;
+	psl->array[end] = x;//把数组开始值赋给x
 	psl->size++;
 }
 void SeqListPopFront(SeqList* psl)//删除顺序表的第一个值
 {
 	assert(psl);
 	CheckCapacity(psl);
-	for (size_t i = 0; i < psl->size; ++i)
+	for (size_t i = 0; i < psl->size; ++i)//整体向前挪动一个位置
 	{
 		psl->array[i - 1] = psl->array[i];
 	}
@@ -91,26 +92,26 @@ int SeqListFind(SeqList* psl, SLDataType x)//在顺序表中查找一个数
 	sssert(psl);
 	CheckCapacity(psl);
 	int i;
-	for ( i = 0; i < psl->size; i++);
+	for ( i = 0; i < psl->size; i++);//比较顺序表的每一个值是否等于X
 	{
 		if (psl->array[i] == x)
 		{
 			return psl->array[i];
 		}
 	}
-	return -1;
+	return -1;//查询不到输出-1
 }
 void SeqListInsert(SeqList* psl, size_t pos, SLDataType x)//在顺序表的pos位置插入一个数
 {
 	assert(psl);
 	CheckCapacity(psl);
 	size_t end = psl->size + 1;
-	while (end > pos)
+	while (end > pos)//在POS位的后面的数整体向后移动
 	{
 		psl->array[end ] = psl->array[end-1];
 		--end;
 	}
-	psl->array[pos] = x;
+	psl->array[pos] = x;//给POS位赋值x
 	psl->size++;
 }
 void SeqListErase(SeqList* psl, size_t pos)//在POS位整体前移动
